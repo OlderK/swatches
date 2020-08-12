@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>a
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canvas</title>
@@ -45,10 +45,10 @@
     
             var w = window.innerWidth
             , h = window.innerHeight
-            , clientW = event.pageX
-            , clientH = event.pageY
-            , centerW = w/2
-            , centerH = h/2
+            , clientX = event.pageX
+            , clientY = event.pageY
+            , centerX = w/2
+            , centerY = h/2
             , sizeX = w/255
             , sizeY = h/255
             , angle , distance , maxdistance , saturation , lightness
@@ -59,53 +59,54 @@
             , H2 = document.getElementsByTagName("h2")[0]
             , H3 = document.getElementsByTagName("h3")[0]
 
-            // H1.innerHTML = clientW + " " + clientH
-            // H2.innerHTML = centerW + " " + centerH
+            // H1.innerHTML = clientX + " " + clientY
+            // H2.innerHTML = centerX + " " + centerY
 
-            distance = Math.sqrt(Math.pow((clientW-centerW),2) + Math.pow((clientH-centerH),2))
+            distance = Math.sqrt(Math.pow((clientX-centerX),2) + Math.pow((clientY-centerY),2))
             
 
-            if(clientW >= centerW){ // 在右边，角度为 0-180
-                if(clientH <= centerH){ // 右上区 0-90
-                    angle = Math.asin((clientW-centerW)/distance) // 弧度制
+            if(clientX >= centerX){ // 在右边，角度为 0-180
+                if(clientY <= centerY){ // 右上区 0-90
+                    angle = Math.asin((clientX-centerX)/distance) // 弧度制
                     maxdistance = Math.cos(angle)
                     angle = angle*180/PI // 角度制
                     if(angle <= 45){
-                        maxdistance = centerH/maxdistance
+                        maxdistance = centerY/maxdistance
                     } else{
-                        maxdistance = centerW/Math.cos((90-angle)*PI/180)
+                        maxdistance = centerX/Math.cos((90-angle)*PI/180)
                     }
                 } else{ // 右下区 90-180
-                    angle = 180 - Math.asin((clientW-centerW)/distance)*180/PI
+                    angle = 180 - Math.asin((clientX-centerX)/distance)*180/PI
                     maxdistance = Math.cos((angle-90)*PI/180)
                     if(angle <= 135){
-                        maxdistance = centerW/maxdistance
+                        maxdistance = centerX/maxdistance
                     } else{
-                        maxdistance = centerH/Math.cos((180-angle)*PI/180)
+                        maxdistance = centerY/Math.cos((180-angle)*PI/180)
                     }
                 }
             } else{ // 在左边，角度为 180-360
-                if(clientH >= centerH){ // 左下区 180-270
-                    angle = Math.asin(Math.abs(clientW-centerW)/distance)*180/PI + 180
+                if(clientY >= centerY){ // 左下区 180-270
+                    angle = Math.asin(Math.abs(clientX-centerX)/distance)*180/PI + 180
                     maxdistance = Math.cos((angle-180)*PI/180)
                     if(angle <= 225){
-                        maxdistance = centerH/maxdistance
+                        maxdistance = centerY/maxdistance
                     } else{
-                        maxdistance = centerW/Math.cos((270-angle)*PI/180)
+                        maxdistance = centerX/Math.cos((270-angle)*PI/180)
                     }
                 } else{ // 左上区 270-360
-                    angle = 360 - Math.asin(Math.abs(clientW-centerW)/distance)*180/PI
+                    angle = 360 - Math.asin(Math.abs(clientX-centerX)/distance)*180/PI
                     maxdistance = Math.cos((angle-270)*PI/180)
                     if(angle <= 315){
-                        maxdistance = centerW/maxdistance
+                        maxdistance = centerX/maxdistance
                     } else{
-                        maxdistance = centerH/Math.cos((360-angle)*PI/180)
+                        maxdistance = centerY/Math.cos((360-angle)*PI/180)
                     }
                 }
             }
-            saturation = distance/maxdistance
-            saturation = String(saturation*100) + '%'
-            document.body.style.backgroundColor = 'hsl(' + angle + ',100%' + ',' + saturation + ')'
+            saturation = '100%'
+            lightness = distance/maxdistance
+            lightness = String(lightness*100) + '%'
+            document.body.style.backgroundColor = 'hsl(' + angle + ',' + saturation + ',' + lightness + ')'
             // H3.innerHTML = saturation//document.body.style.backgroundColor // string
 
             var box = document.querySelector(".box")
@@ -145,52 +146,52 @@
                 // console.log(e.touches)
                 var w = window.innerWidth
                 , h = window.innerHeight
-                , clientW = e.touches[0].pageX
-                , clientH = e.touches[0].pageY
-                , centerW = w/2
-                , centerH = h/2
+                , clientX = e.touches[0].pageX
+                , clientY = e.touches[0].pageY
+                , centerX = w/2
+                , centerY = h/2
                 , sizeX = w/255
                 , sizeY = h/255
                 , angle , distance , maxdistance , saturation , lightness
                 const PI = 3.1415926
-                distance = Math.sqrt(Math.pow((clientW-centerW),2) + Math.pow((clientH-centerH),2))
+                distance = Math.sqrt(Math.pow((clientX-centerX),2) + Math.pow((clientY-centerY),2))
                 
 
-                if(clientW >= centerW){ // 在右边，角度为 0-180
-                    if(clientH <= centerH){ // 右上区 0-90
-                        angle = Math.asin((clientW-centerW)/distance) // 弧度制
+                if(clientX >= centerX){ // 在右边，角度为 0-180
+                    if(clientY <= centerY){ // 右上区 0-90
+                        angle = Math.asin((clientX-centerX)/distance) // 弧度制
                         maxdistance = Math.cos(angle)
                         angle = angle*180/PI // 角度制
                         if(angle <= 45){
-                            maxdistance = centerH/maxdistance
+                            maxdistance = centerY/maxdistance
                         } else{
-                            maxdistance = centerW/Math.cos((90-angle)*PI/180)
+                            maxdistance = centerX/Math.cos((90-angle)*PI/180)
                         }
                     } else{ // 右下区 90-180
-                        angle = 180 - Math.asin((clientW-centerW)/distance)*180/PI
+                        angle = 180 - Math.asin((clientX-centerX)/distance)*180/PI
                         maxdistance = Math.cos((angle-90)*PI/180)
                         if(angle <= 135){
-                            maxdistance = centerW/maxdistance
+                            maxdistance = centerX/maxdistance
                         } else{
-                            maxdistance = centerH/Math.cos((180-angle)*PI/180)
+                            maxdistance = centerY/Math.cos((180-angle)*PI/180)
                         }
                     }
                 } else{ // 在左边，角度为 180-360
-                    if(clientH >= centerH){ // 左下区 180-270
-                        angle = Math.asin(Math.abs(clientW-centerW)/distance)*180/PI + 180
+                    if(clientY >= centerY){ // 左下区 180-270
+                        angle = Math.asin(Math.abs(clientX-centerX)/distance)*180/PI + 180
                         maxdistance = Math.cos((angle-180)*PI/180)
                         if(angle <= 225){
-                            maxdistance = centerH/maxdistance
+                            maxdistance = centerY/maxdistance
                         } else{
-                            maxdistance = centerW/Math.cos((270-angle)*PI/180)
+                            maxdistance = centerX/Math.cos((270-angle)*PI/180)
                         }
                     } else{ // 左上区 270-360
-                        angle = 360 - Math.asin(Math.abs(clientW-centerW)/distance)*180/PI
+                        angle = 360 - Math.asin(Math.abs(clientX-centerX)/distance)*180/PI
                         maxdistance = Math.cos((angle-270)*PI/180)
                         if(angle <= 315){
-                            maxdistance = centerW/maxdistance
+                            maxdistance = centerX/maxdistance
                         } else{
-                            maxdistance = centerH/Math.cos((360-angle)*PI/180)
+                            maxdistance = centerY/Math.cos((360-angle)*PI/180)
                         }
                     }
                 }
@@ -221,5 +222,6 @@
 
        
     </script>
+    
 </body>
 </html>
