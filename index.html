@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convas</title>
+   
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            overflow: hidden;
+            width: 100%;
+        }
+        .box{
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -5px;
+            margin-top: -5px;
+            background-color: #000;
+            border-radius: 50%;
+            /* background: linear-gradient(to right,red,green,blue,red); */
+            /* background-color: hsl(46, 86%, 57%); */
+            /* background-color: rgb(0, 0, 0); */
+        }
+    </style>
+</head>
+<body>
+    <!-- 鼠标当前位置：<h1></h1>
+    显示区域中心位置：<h2></h2>
+    鼠标位置与中心所成夹角：<h3></h3>-->
+    <!-- <div class="box"></div> -->
+
+    <script>
+        // PC端
+        window.addEventListener('mousemove',Touch) 
+        
+        function Touch (event){
+            event = event || window.event
+    
+            var w = window.innerWidth
+            , h = window.innerHeight
+            , clientW = event.pageX
+            , clientH = event.pageY
+            , centerW = w/2
+            , centerH = h/2
+            , sizeX = w/255
+            , sizeY = h/255
+            , angle , distance , maxdistance , saturation , lightness
+            const PI = 3.1415926
+            // console.log(window.outerWidth,window.outerHeight)
+            // console.log(w,h,size)
+            var H1 = document.getElementsByTagName("h1")[0]
+            , H2 = document.getElementsByTagName("h2")[0]
+            , H3 = document.getElementsByTagName("h3")[0]
+
+            // H1.innerHTML = clientW + " " + clientH
+            // H2.innerHTML = centerW + " " + centerH
+
+            distance = Math.sqrt(Math.pow((clientW-centerW),2) + Math.pow((clientH-centerH),2))
+            
+
+            if(clientW >= centerW){ // 在右边，角度为 0-180
+                if(clientH <= centerH){ // 右上区 0-90
+                    angle = Math.asin((clientW-centerW)/distance) // 弧度制
+                    maxdistance = Math.cos(angle)
+                    angle = angle*180/PI // 角度制
+                    if(angle <= 45){
+                        maxdistance = centerH/maxdistance
+                    } else{
+                        maxdistance = centerW/Math.cos((90-angle)*PI/180)
+                    }
+                } else{ // 右下区 90-180
+                    angle = 180 - Math.asin((clientW-centerW)/distance)*180/PI
+                    maxdistance = Math.cos((angle-90)*PI/180)
+                    if(angle <= 135){
+                        maxdistance = centerW/maxdistance
+                    } else{
+                        maxdistance = centerH/Math.cos((180-angle)*PI/180)
+                    }
+                }
+            } else{ // 在左边，角度为 180-360
+                if(clientH >= centerH){ // 左下区 180-270
+                    angle = Math.asin(Math.abs(clientW-centerW)/distance)*180/PI + 180
+                    maxdistance = Math.cos((angle-180)*PI/180)
+                    if(angle <= 225){
+                        maxdistance = centerH/maxdistance
+                    } else{
+                        maxdistance = centerW/Math.cos((270-angle)*PI/180)
+                    }
+                } else{ // 左上区 270-360
+                    angle = 360 - Math.asin(Math.abs(clientW-centerW)/distance)*180/PI
+                    maxdistance = Math.cos((angle-270)*PI/180)
+                    if(angle <= 315){
+                        maxdistance = centerW/maxdistance
+                    } else{
+                        maxdistance = centerH/Math.cos((360-angle)*PI/180)
+                    }
+                }
+            }
+            saturation = distance/maxdistance
+            saturation = String(saturation*100) + '%'
+            document.body.style.backgroundColor = 'hsl(' + angle + ',100%' + ',' + saturation + ')'
+            // H3.innerHTML = saturation//document.body.style.backgroundColor // string
+
+            var box = document.querySelector(".box")
+            // console.log(box.clientLeft)
+            // H3.innerHTML = box.clientLeft
+            box = document.body
+            // box.style.backgroundColor = 'rgb(' + event.pageX/sizeX + ',' + event.pageY/sizeY + ',0)'
+
+        }
+
+        // 一闪一闪亮晶晶
+        let flashtimer
+        function flashing(speed,beforcolor){
+            let l = beforcolor
+            flashtimer = setInterval(function(){
+                switch (l){
+                    case beforcolor:
+                        document.body.style.backgroundColor = '#fff'
+                        break;
+                    default:
+                        document.body.style.backgroundColor = beforcolor
+                        l = beforcolor
+                        break;
+                }
+            },speed)
+        }
+        window.addEventListener('dblclick',function(){
+            console.log(document.body.style.backgroundColor)
+            clearInterval(flashtimer)
+
+            // flashing(100,document.body.style.backgroundColor)
+        })
+
+        // 手机端
+        window.addEventListener('touchmove',function(e){
+                e = e || window.event
+                // console.log(e.touches)
+                var w = window.innerWidth
+                , h = window.innerHeight
+                , clientW = e.touches[0].pageX
+                , clientH = e.touches[0].pageY
+                , centerW = w/2
+                , centerH = h/2
+                , sizeX = w/255
+                , sizeY = h/255
+                , angle , distance , maxdistance , saturation , lightness
+                const PI = 3.1415926
+                distance = Math.sqrt(Math.pow((clientW-centerW),2) + Math.pow((clientH-centerH),2))
+                
+
+                if(clientW >= centerW){ // 在右边，角度为 0-180
+                    if(clientH <= centerH){ // 右上区 0-90
+                        angle = Math.asin((clientW-centerW)/distance) // 弧度制
+                        maxdistance = Math.cos(angle)
+                        angle = angle*180/PI // 角度制
+                        if(angle <= 45){
+                            maxdistance = centerH/maxdistance
+                        } else{
+                            maxdistance = centerW/Math.cos((90-angle)*PI/180)
+                        }
+                    } else{ // 右下区 90-180
+                        angle = 180 - Math.asin((clientW-centerW)/distance)*180/PI
+                        maxdistance = Math.cos((angle-90)*PI/180)
+                        if(angle <= 135){
+                            maxdistance = centerW/maxdistance
+                        } else{
+                            maxdistance = centerH/Math.cos((180-angle)*PI/180)
+                        }
+                    }
+                } else{ // 在左边，角度为 180-360
+                    if(clientH >= centerH){ // 左下区 180-270
+                        angle = Math.asin(Math.abs(clientW-centerW)/distance)*180/PI + 180
+                        maxdistance = Math.cos((angle-180)*PI/180)
+                        if(angle <= 225){
+                            maxdistance = centerH/maxdistance
+                        } else{
+                            maxdistance = centerW/Math.cos((270-angle)*PI/180)
+                        }
+                    } else{ // 左上区 270-360
+                        angle = 360 - Math.asin(Math.abs(clientW-centerW)/distance)*180/PI
+                        maxdistance = Math.cos((angle-270)*PI/180)
+                        if(angle <= 315){
+                            maxdistance = centerW/maxdistance
+                        } else{
+                            maxdistance = centerH/Math.cos((360-angle)*PI/180)
+                        }
+                    }
+                }
+                saturation = '100%'
+                lightness = distance/maxdistance
+                lightness = String(lightness*100) + '%'
+                document.body.style.backgroundColor = 'hsl(' + angle + ',' + saturation + ',' + lightness + ')'
+            })
+        window.addEventListener('touchstart',myTouch)
+        window.addEventListener('touchend',myTouch)
+        let touchtimes = 0
+        function myTouch(event){
+            event = event || window.event
+            switch(event.type){
+                case "touchstart":
+                    break;
+                case "touchend":
+                    touchtimes++
+                    if(touchtimes >= 2){
+                        console.log('doubleclick')
+                        touchtimes = 0
+                    }
+                    break;
+            }
+        }
+
+
+
+       
+    </script>
+</body>
+</html>
